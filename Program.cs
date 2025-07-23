@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using KLVConverter.KLV;
+using Microsoft.Extensions.Logging;
 
 internal class Program
 {
@@ -31,16 +32,14 @@ internal class Program
         if (args.Length > 0)
         {
             Logger.LogInformation("{nbFiles} KLV data files to convert", args.Length);
+            KLVReader reader = new(Logger);
             foreach (string datafile in args)
             {
                 // check if file exist and open it
                 if (File.Exists(datafile))
                 {
                     Logger.LogInformation("Process {file} datafile", datafile);
-                    using (var fs = new FileStream(@datafile, FileMode.Open))
-                    {
-                        Logger.LogInformation("{datafile}: {length} bytes", datafile, fs.Length);
-                    }
+                    reader.ReadFile(datafile);
                     ProcessedFiles.Add(datafile);
 
                 }
