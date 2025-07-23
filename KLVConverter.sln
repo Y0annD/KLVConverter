@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KLVConverter", "KLVConverter.csproj", "{9232416A-C368-6D75-62EB-706179849CAC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9232416A-C368-6D75-62EB-706179849CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9232416A-C368-6D75-62EB-706179849CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9232416A-C368-6D75-62EB-706179849CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9232416A-C368-6D75-62EB-706179849CAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4933D43C-0649-4682-BE02-055D982E8FA0}
+	EndGlobalSection
+EndGlobal
