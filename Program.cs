@@ -1,4 +1,5 @@
-﻿using KLVConverter.KLV;
+﻿using ExcelLibrary.SpreadSheet;
+using KLVConverter.KLV;
 using Microsoft.Extensions.Logging;
 
 internal class Program
@@ -39,7 +40,32 @@ internal class Program
                 if (File.Exists(datafile))
                 {
                     Logger.LogInformation("Process {file} datafile", datafile);
-                    reader.ReadFile(datafile);
+                    List<List<KLVData>> data = reader.ReadFile(datafile);
+
+                    Workbook workbook = new Workbook();
+                    Worksheet rawWorksheet = new Worksheet("RawKLVData");
+                    Worksheet processedWorksheet = new Worksheet("ProcessedST0601Data");
+                    for (int row = 0; row < data.Count; row++)
+                    {
+                        for (int indexData = 0; indexData < data[row].Count; indexData++)
+                        {
+                            KLVData localData = data[row][indexData];
+                            rawWorksheet.Cells[row + 1, 0] = new Cell(row);
+                            processedWorksheet.Cells[row + 1, 0] = new Cell(row);
+                            rawWorksheet.Cells[row + 1, localData.Key] = new Cell(string.Join(",", localData.Value));
+                        }
+                    }
+                    rawWorksheet.Cells[0, 0] = new Cell("Id\\Tag");
+                    processedWorksheet.Cells[0, 0] = new Cell("Id\\Tag");
+                    for (int tagIndex = 1; tagIndex < 128; tagIndex++)
+                    {
+                        rawWorksheet.Cells[0, tagIndex] = new Cell(tagIndex);
+                        processedWorksheet.Cells[0, tagIndex] = new Cell(tagIndex);
+                    }
+                    workbook.Worksheets.Add(rawWorksheet);
+                    workbook.Worksheets.Add(processedWorksheet);
+                    workbook.Save("./"+Path.GetFileName(datafile)+".xlsx");
+
                     ProcessedFiles.Add(datafile);
 
                 }
