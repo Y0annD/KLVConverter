@@ -26,7 +26,7 @@ public class KLVReader
         using (var fs = new FileStream(@filePath, FileMode.Open))
         {
             Logger.LogInformation("{datafile}: {length} bytes", filePath, fs.Length);
-            using BinaryReader binReader = new BinaryReader(fs);
+            using BinaryReader binReader = new(fs);
             long position = fs.Position;
             do
             {
@@ -72,16 +72,8 @@ public class KLVReader
     {
         int value = 0;
         int read;
-        // int size = 0;
-        // do
-        // {
-        //     read = reader.ReadByte();
-        //     int highbits = value << 7;
-        //     int lowbits = read & 0x7F;
-        //     value = highbits + lowbits;
-        //     size++;
-        // } while ((read & 0x80) == 0x80);
         read = reader.ReadByte();
+        // TODO: bad reading
         if (read > 127)
         {
             value = reader.ReadByte();

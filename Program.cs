@@ -34,6 +34,8 @@ internal class Program
         {
             Logger.LogInformation("{nbFiles} KLV data files to convert", args.Length);
             KLVReader reader = new(Logger);
+            ST0601Standard st0601 = new(Logger);
+
             foreach (string datafile in args)
             {
                 // check if file exist and open it
@@ -53,18 +55,19 @@ internal class Program
                             rawWorksheet.Cells[row + 1, 0] = new Cell(row);
                             processedWorksheet.Cells[row + 1, 0] = new Cell(row);
                             rawWorksheet.Cells[row + 1, localData.Key] = new Cell(string.Join(",", localData.Value));
+                            processedWorksheet.Cells[row + 1, localData.Key] = new Cell(st0601.KlvToStringOutput(localData));
                         }
                     }
                     rawWorksheet.Cells[0, 0] = new Cell("Id\\Tag");
                     processedWorksheet.Cells[0, 0] = new Cell("Id\\Tag");
                     for (int tagIndex = 1; tagIndex < 128; tagIndex++)
                     {
-                        rawWorksheet.Cells[0, tagIndex] = new Cell(tagIndex);
-                        processedWorksheet.Cells[0, tagIndex] = new Cell(tagIndex);
+                        rawWorksheet.Cells[0, tagIndex] = new Cell(st0601.GetTagName(tagIndex));
+                        processedWorksheet.Cells[0, tagIndex] = new Cell(st0601.GetTagName(tagIndex));
                     }
                     workbook.Worksheets.Add(rawWorksheet);
                     workbook.Worksheets.Add(processedWorksheet);
-                    workbook.Save("./"+Path.GetFileName(datafile)+".xlsx");
+                    workbook.Save("./" + Path.GetFileName(datafile) + ".xlsx");
 
                     ProcessedFiles.Add(datafile);
 
