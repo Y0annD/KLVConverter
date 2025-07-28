@@ -15,6 +15,7 @@ public class DataTypeConverterFactory
                 {
                     return new StringDataTypeConverter();
                 }
+            case ST0601Datatype.UINT8:
             case ST0601Datatype.UINT16:
             case ST0601Datatype.UINT64:
                 {

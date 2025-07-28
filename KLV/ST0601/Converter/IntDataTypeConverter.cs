@@ -19,6 +19,11 @@ public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, d
         Array.Reverse(newData);
         switch (Input)
         {
+            case ST0601Datatype.UINT8:
+                {
+                    value = newData[0];
+                    break;
+            }
             case ST0601Datatype.UINT16:
                 {
                     value = BitConverter.ToUInt16(newData);
