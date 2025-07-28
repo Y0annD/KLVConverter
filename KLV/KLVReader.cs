@@ -37,7 +37,7 @@ public class KLVReader
                 if (StructuralComparisons.StructuralEqualityComparer.Equals(Ref_UL_KEY, ulKey))
                 {
                     Logger.LogInformation("Key is ST0601 Key");
-                    length = ReadOidValue(binReader);
+                    length = ReadOidLength(binReader);
                     Logger.LogInformation("Length: {length}", length);
                     byte[] value = new byte[length];
                     binReader.Read(value);
@@ -68,15 +68,29 @@ public class KLVReader
         return data;
     }
 
-    private int ReadOidValue(BinaryReader reader)
+    /// <summary>
+    /// Read Basic Encoding Rule OID Length.
+    /// If MSB of the first byte is one, it's an long encoded length.
+    /// In this case, this byte means the number of bytes to read to retrieve length
+    /// Else, this is the length
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <returns></returns>
+    private static int ReadOidLength(BinaryReader reader)
     {
         int value = 0;
         int read;
         read = reader.ReadByte();
-        // TODO: bad reading
-        if (read > 127)
+        if ((read & 0x80) == 0x80)
         {
-            value = reader.ReadByte();
+            // Long BER
+            // nb of bytes to read 
+            int nbBytesToRead = read & 0x7F;
+            while (nbBytesToRead-- > 0)
+            {
+                value <<= 8;
+                value += reader.ReadByte();
+            }
         }
         else
         {
