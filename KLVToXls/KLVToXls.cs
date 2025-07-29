@@ -2,7 +2,7 @@
 using KLVConverter.KLV;
 using Microsoft.Extensions.Logging;
 
-internal class Program
+internal class KlvToXls
 {
     /// <summary>
     /// Logger.
@@ -17,7 +17,7 @@ internal class Program
     /// </summary>
     private List<string> ProcessedFiles = [];
 
-    public Program()
+    public KlvToXls()
     {
         using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
         Logger = factory.CreateLogger("KLVConverter");
@@ -67,7 +67,7 @@ internal class Program
                     }
                     workbook.Worksheets.Add(rawWorksheet);
                     workbook.Worksheets.Add(processedWorksheet);
-                    workbook.Save("./" + Path.GetFileName(datafile) + ".xlsx");
+                    workbook.Save("./" + Path.GetFileName(datafile) + ".xls");
 
                     ProcessedFiles.Add(datafile);
 
@@ -113,7 +113,7 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        Program prog = new Program();
+        KlvToXls prog = new();
         prog.Process(args);
 
     }

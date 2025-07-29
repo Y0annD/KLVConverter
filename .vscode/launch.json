@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
     {
-        "name": "C#: KLVConverter Debug",
+        "name": "C#: KLVToXls Debug",
         "type": "coreclr",
         "request": "launch",
-        "program": "${workspaceFolder}/KLVConverter/bin/Debug/net9.0/KLVConverter.dll",
+        "program": "${workspaceFolder}/KLVToXls/bin/Debug/net9.0/KLVToXls.dll",
         "args": ["${workspaceFolder}/data/truck.klv"],
         "preLaunchTask": "dotnet: build"
     }
