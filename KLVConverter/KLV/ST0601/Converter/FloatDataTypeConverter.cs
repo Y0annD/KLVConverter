@@ -23,21 +23,37 @@ public class FloatDataTypeConverter(ST0601Datatype input, ST0601Datatype output,
         {
             case ST0601Datatype.UINT16:
                 {
+                    if (newData.Length < 2)
+                    {
+                        throw new IOException("Insufficient array length. Expected 2 but was " + newData.Length);
+                    }
                     value = BitConverter.ToUInt16(newData);
                     break;
                 }
             case ST0601Datatype.UINT32:
                 {
+                    if (newData.Length < 4)
+                    {
+                        throw new IOException("Insufficient array length. Expected 4 but was " + newData.Length);
+                    }
                     value = BitConverter.ToUInt32(newData);
                     break;
                 }
             case ST0601Datatype.INT16:
                 {
+                    if (newData.Length < 2)
+                    {
+                        throw new IOException("Insufficient array length. Expected 2 but was " + newData.Length);
+                    }
                     value = BitConverter.ToInt16(newData);
                     break;
                 }
             case ST0601Datatype.INT32:
                 {
+                    if (newData.Length < 4)
+                    {
+                        throw new IOException("Insufficient array length. Expected 4 but was " + newData.Length);
+                    }
                     value = BitConverter.ToInt32(newData);
                     break;
                 }
