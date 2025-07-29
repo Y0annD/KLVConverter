@@ -8,7 +8,7 @@
         "name": "C#: KLVConverter Debug",
         "type": "coreclr",
         "request": "launch",
-        "program": "${workspaceFolder}/bin/Debug/net9.0/KLVConverter.dll",
+        "program": "${workspaceFolder}/KLVConverter/bin/Debug/net9.0/KLVConverter.dll",
         "args": ["${workspaceFolder}/data/truck.klv"],
         "preLaunchTask": "dotnet: build"
     }
