@@ -1,0 +1,77 @@
+
+using KLVConverter.KLV;
+using Microsoft.Extensions.Logging;
+
+namespace KLVConverter.Tests.KLV;
+
+public class KLVManagerTests
+{
+
+    KLVManager Manager;
+
+    [SetUp]
+    public void Setup()
+    {
+        using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILogger logger = factory.CreateLogger("KLVManagerTests");
+        Manager = new(logger);
+    }
+
+    [Test]
+    public void TestSeekToNextMessageFirstMatch()
+    {
+        Stream stream = new MemoryStream([0x6, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0, 0x1, 0x0]);
+        BinaryReader reader = new(stream);
+        Assert.That(Manager.SeekToNextMessage(reader), Is.True);
+        Assert.That(stream.Position, Is.EqualTo(16));
+    }
+
+    [Test]
+    public void TestSeekToNextMessageWithOffset()
+    {
+        Stream stream = new MemoryStream([0x0, 0x6, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0, 0x1, 0x0]);
+        BinaryReader reader = new(stream);
+        Assert.That(Manager.SeekToNextMessage(reader), Is.True);
+        Assert.That(stream.Position, Is.EqualTo(17));
+    }
+
+    [Test]
+    public void TestSeekToNextMessageNotFound()
+    {
+        Stream stream = new MemoryStream([0x0, 0x0, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0, 0x1, 0x0]);
+        BinaryReader reader = new(stream);
+        Assert.That(Manager.SeekToNextMessage(reader), Is.False);
+    }
+
+    [Test]
+    public void TestReadShortBerLength()
+    {
+        BinaryReader reader = new(new MemoryStream([1]));
+
+
+        Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(1));
+
+        reader = new(new MemoryStream([0x7F]));
+
+
+        Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(0x7F));
+    }
+
+    [Test]
+    public void TestReadLongBerLength()
+    {
+        BinaryReader reader = new(new MemoryStream([0x81, 0x1]));
+
+
+        Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(1));
+
+        reader = new(new MemoryStream([0x81, 0xFF]));
+
+
+        Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(0xFF));
+
+        reader = new(new MemoryStream([0x82,0xFF, 0xFF]));
+
+        Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(65535));
+    }
+}
