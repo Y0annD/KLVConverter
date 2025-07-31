@@ -25,8 +25,8 @@ public class FloatDatatypeConverterTests
         FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
 
         Assert.That(dc.Accept([0, 0]), Is.EqualTo("0"));
-        Assert.That(dc.Accept([0, 1]), Is.EqualTo("0,5"));
-        Assert.That(dc.Accept([0xFF, 0xFF]), Is.EqualTo("32767,5"));
+        Assert.That(dc.Accept([0, 1]), Is.EqualTo(Convert.ToString(0.5)));
+        Assert.That(dc.Accept([0xFF, 0xFF]), Is.EqualTo(Convert.ToString(32767.5)));
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class FloatDatatypeConverterTests
         FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 1);
 
         Assert.That(dc.Accept([0, 0]), Is.EqualTo("1"));
-        Assert.That(dc.Accept([0, 1]), Is.EqualTo("1,5"));
+        Assert.That(dc.Accept([0, 1]), Is.EqualTo(Convert.ToString(1.5)));
     }
 
     [Test]
@@ -53,8 +53,8 @@ public class FloatDatatypeConverterTests
         FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
 
         Assert.That(dc.Accept([0, 0]), Is.EqualTo("0"));
-        Assert.That(dc.Accept([0, 1]), Is.EqualTo("0,5"));
-        Assert.That(dc.Accept([0xFF, 0xFF]), Is.EqualTo("-0,5"));
+        Assert.That(dc.Accept([0, 1]), Is.EqualTo(Convert.ToString(0.5)));
+        Assert.That(dc.Accept([0xFF, 0xFF]), Is.EqualTo(Convert.ToString(-0.5)));
     }
 
     [Test]
@@ -72,8 +72,8 @@ public class FloatDatatypeConverterTests
         FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT32, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
 
         Assert.That(dc.Accept([0, 0, 0, 0]), Is.EqualTo("0"));
-        Assert.That(dc.Accept([0, 0, 0, 1]), Is.EqualTo("0,5"));
-        Assert.That(dc.Accept([0xFF, 0xFF, 0xFF, 0xFF]), Is.EqualTo("2147483647,5"));
+        Assert.That(dc.Accept([0, 0, 0, 1]), Is.EqualTo(Convert.ToString(0.5)));
+        Assert.That(dc.Accept([0xFF, 0xFF, 0xFF, 0xFF]), Is.EqualTo(Convert.ToString(2147483647.5)));
     }
 
     [Test]
@@ -91,8 +91,8 @@ public class FloatDatatypeConverterTests
         FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT32, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
 
         Assert.That(dc.Accept([0, 0, 0, 0]), Is.EqualTo("0"));
-        Assert.That(dc.Accept([0, 0, 0, 1]), Is.EqualTo("0,5"));
-        Assert.That(dc.Accept([0xFF, 0xFF, 0xFF, 0xFF]), Is.EqualTo("-0,5"));
+        Assert.That(dc.Accept([0, 0, 0, 1]), Is.EqualTo(Convert.ToString(0.5)));
+        Assert.That(dc.Accept([0xFF, 0xFF, 0xFF, 0xFF]), Is.EqualTo(Convert.ToString(-0.5)));
     }
 
     [Test]
