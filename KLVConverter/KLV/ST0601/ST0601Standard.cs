@@ -42,6 +42,10 @@ public class ST0601Standard
         ST0601Model.Add(19, new ST0601ConverterStructure("Sensor Relative Elevation angle", ST0601Datatype.FLOAT64, ST0601Datatype.INT32, 360d / 4294967294d));
         ST0601Model.Add(20, new ST0601ConverterStructure("Sensor Relative Roll angle", ST0601Datatype.FLOAT64, ST0601Datatype.UINT32, 360d / 4294967294d));
         ST0601Model.Add(21, new ST0601ConverterStructure("Slant Range", ST0601Datatype.FLOAT64, ST0601Datatype.UINT32, 5000000d / 4294967295d));
+        ST0601Model.Add(22, new ST0601ConverterStructure("Target Width", ST0601Datatype.UINT16, ST0601Datatype.FLOAT32, 10000d / 65535d));
+        ST0601Model.Add(23, new ST0601ConverterStructure("Frame Center Latitude", ST0601Datatype.FLOAT32, ST0601Datatype.INT32, 180d / 4294967294d));
+        ST0601Model.Add(24, new ST0601ConverterStructure("Frame Center Longitude", ST0601Datatype.FLOAT32, ST0601Datatype.INT32, 360d / 4294967294d));
+        ST0601Model.Add(25, new ST0601ConverterStructure("Frame Center Elevation", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 19900d / 65535d, -900));
         ST0601Model.Add(59, new ST0601ConverterStructure("Platform Call Sign", ST0601Datatype.STRING, ST0601Datatype.STRING));
         ST0601Model.Add(65, new ST0601ConverterStructure("UAS DL Version", ST0601Datatype.UINT8, ST0601Datatype.UINT8));
         ST0601Model.Add(70, new ST0601ConverterStructure("Alternate platform name", ST0601Datatype.STRING, ST0601Datatype.STRING));
@@ -96,7 +100,7 @@ public class ST0601Standard
             }
             catch (IOException e)
             {
-                Logger.LogError("Unable to convert value for Key: {key}, with length: {length}",input.Key, input.Length);
+                Logger.LogError(e, "Unable to convert value for Key: {key}, with length: {length}", input.Key, input.Length);
                 return "";
             }
         }

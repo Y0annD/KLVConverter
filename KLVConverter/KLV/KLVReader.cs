@@ -3,50 +3,48 @@ using Microsoft.Extensions.Logging;
 
 namespace KLVConverter.KLV;
 
-public class KLVReader
+/// <summary>
+/// KLV Reader constructor.
+/// </summary>
+/// <param name="logger">Reference logger</param>
+public class KLVReader(ILogger logger)
 {
     /// <summary>
     /// Logger reference.
     /// </summary>
-    private readonly ILogger Logger;
+    private readonly ILogger Logger = logger;
 
     /// <summary>
     /// KlvManager.
     /// </summary>
-    private KLVManager KlvManager;
+    private readonly KLVManager KlvManager = new(logger);
 
     /// <summary>
-    /// KLV Reader constructor.
+    /// Get the ordered list of data as Dictionnary.
     /// </summary>
-    /// <param name="logger">Reference logger</param>
-    public KLVReader(ILogger logger)
+    /// <param name="filePath">File to read</param>
+    /// <returns>List of KLVData in this file</returns>
+    public List<Dictionary<int, KLVData>> ReadFile(string filePath)
     {
-        Logger = logger;
-        KlvManager = new(logger);
-    }
-
-    public List<List<KLVData>> ReadFile(string filePath)
-    {
-        List<List<KLVData>> data = [];
-        using (var fs = new FileStream(@filePath, FileMode.Open))
+        List<Dictionary<int, KLVData>> data = [];
+        using (FileStream fs = new(@filePath, FileMode.Open))
         {
             Logger.LogInformation("{datafile}: {length} bytes", filePath, fs.Length);
             using BinaryReader binReader = new(fs);
             long position = fs.Position;
             while (KlvManager.SeekToNextMessage(binReader))
             {
-                int length = 0;
                 Logger.LogDebug("Key is ST0601 Key");
-                length = KlvManager.ReadOidLength(binReader);
+                int length = KlvManager.ReadOidLength(binReader);
                 Logger.LogDebug("Length: {length}", length);
                 byte[] value = new byte[length];
                 binReader.Read(value);
                 Logger.LogDebug("Value: {value}", value);
-                List<KLVData> localData = [];
+                Dictionary<int, KLVData> localData = [];
                 int index = 0;
                 do
                 {
-                    KLVData item = new KLVData
+                    KLVData item = new()
                     {
                         Key = value[index++],
                         Length = value[index++]
@@ -61,7 +59,7 @@ public class KLVReader
                     }
                     Array.Copy(value, index, item.Value, 0, item.Length);
                     index += (int)item.Length;
-                    localData.Add(item);
+                    localData.Add(item.Key, item);
                     Logger.LogDebug("KLV Data: {klv}", item.ToString());
 
                 } while (index < value.Length);
