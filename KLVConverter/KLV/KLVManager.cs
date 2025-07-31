@@ -14,27 +14,44 @@ public class KLVManager(ILogger logger)
     /// </summary>
     private readonly ILogger Logger = logger;
 
+    private readonly byte[] ST298_Ref = [0x6, 0xE, 0x2B, 0x34];
+
     /// <summary>
-    /// Reference Universal Label Key to match for start of message.
+    /// Known implementations of specific standard
     /// </summary>
-    private readonly byte[] Ref_UL_KEY = [0x6, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0];
+    public Dictionary<byte[], ISMPTEImplementation> Implementations = [];
 
 
+    public bool SpecificULKeyFound(byte[] key)
+    {
+        foreach (byte[] implementation in Implementations.Keys)
+        {
+            if (StructuralComparisons.StructuralEqualityComparer.Equals(implementation, key))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     /// <summary>
     /// Seek stream to next valid message based on Reference UL Key.
     /// </summary>
     /// <param name="reader">reader that contains data</param>
     /// <returns></returns>
-    public bool SeekToNextMessage(BinaryReader reader)
+    public bool SeekToNextSMPTEKnownMessage(BinaryReader reader)
     {
         Logger.LogDebug("Seek to next message");
-        byte[] ulKey = new byte[Ref_UL_KEY.Length];
+        byte[] ulKey = new byte[ST298_Ref.Length];
+        byte[] specificKey = new byte[16 - ST298_Ref.Length];
         int nbRead;
         do
         {
 
             nbRead = reader.Read(ulKey);
-            if (StructuralComparisons.StructuralEqualityComparer.Equals(Ref_UL_KEY, ulKey))
+            nbRead += reader.Read(specificKey);
+            bool smpteFound = StructuralComparisons.StructuralEqualityComparer.Equals(ST298_Ref, ulKey);
+            bool specificFound = SpecificULKeyFound(specificKey);
+            if (StructuralComparisons.StructuralEqualityComparer.Equals(ST298_Ref, ulKey) && SpecificULKeyFound(specificKey))
             {
                 Logger.LogDebug("Message found");
                 return true;
@@ -45,11 +62,11 @@ public class KLVManager(ILogger logger)
                 // Check if current key contains a subset of the start of the reference UL Key
                 int checkLength = 1;
                 int checkPosition = -1;
-                byte[] compareUlArray = new byte[Ref_UL_KEY.Length - 1];
-                Array.Copy(ulKey, 1, compareUlArray, 0, Ref_UL_KEY.Length - 1);
+                byte[] compareUlArray = new byte[ST298_Ref.Length - 1];
+                Array.Copy(ulKey, 1, compareUlArray, 0, ST298_Ref.Length - 1);
                 byte[] checkArray;
                 checkArray = new byte[checkLength];
-                Array.Copy(Ref_UL_KEY, checkArray, checkLength);
+                Array.Copy(ST298_Ref, checkArray, checkLength);
                 bool isSubset = !checkArray.Except(compareUlArray).Any();
                 if (isSubset)
                 {
@@ -57,7 +74,7 @@ public class KLVManager(ILogger logger)
                 }
                 if (checkPosition >= 0)
                 {
-                    reader.BaseStream.Seek(-ulKey.Length + checkPosition + 1, SeekOrigin.Current);
+                    reader.BaseStream.Seek(-16 + checkPosition + 1, SeekOrigin.Current);
                 }
             }
         } while (nbRead > 0);
@@ -108,7 +125,7 @@ public class KLVManager(ILogger logger)
     public Dictionary<int, KLVData> ReadNextKLVMessage(BinaryReader reader)
     {
         Dictionary<int, KLVData> message = [];
-        if (SeekToNextMessage(reader))
+        if (SeekToNextSMPTEKnownMessage(reader))
         {
             // get length of data for the current message
             int length = ReadOidLength(reader);
@@ -140,5 +157,10 @@ public class KLVManager(ILogger logger)
             } while (index < value.Length);
         }
         return message;
+    }
+
+    public void RegisterImplementation(ISMPTEImplementation implementation)
+    {
+        Implementations.Add(implementation.GetDesignator(), implementation);
     }
 }

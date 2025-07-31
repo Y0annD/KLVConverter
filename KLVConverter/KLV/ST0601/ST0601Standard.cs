@@ -4,8 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace KLVConverter.KLV;
 
-public class ST0601Standard
+public class ST0601Standard : ISMPTEImplementation
 {
+
     /// <summary>
     /// Reference of logger.
     /// </summary>
@@ -60,6 +61,12 @@ public class ST0601Standard
         }
     }
 
+    public byte[] GetDesignator()
+    {
+        return [0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0];
+    }
+
+
     /// <summary>
     /// Get name to display if exist for the specified tag.
     /// </summary>
@@ -90,7 +97,7 @@ public class ST0601Standard
     /// </summary>
     /// <param name="input">input to convert</param>
     /// <returns>value as string</returns>
-    public string? KlvToStringOutput(KLVData input)
+    public string? ValueToStringOutput(KLVData input)
     {
         if (ConverterMap.ContainsKey(input.Key))
         {

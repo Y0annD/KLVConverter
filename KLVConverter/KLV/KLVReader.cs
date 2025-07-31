@@ -7,17 +7,24 @@ namespace KLVConverter.KLV;
 /// KLV Reader constructor.
 /// </summary>
 /// <param name="logger">Reference logger</param>
-public class KLVReader(ILogger logger)
+public class KLVReader
 {
     /// <summary>
     /// Logger reference.
     /// </summary>
-    private readonly ILogger Logger = logger;
+    private readonly ILogger Logger;
 
     /// <summary>
     /// KlvManager.
     /// </summary>
-    private readonly KLVManager KlvManager = new(logger);
+    private readonly KLVManager KlvManager;
+
+    public KLVReader(ILogger logger)
+    {
+        Logger = logger;
+        KlvManager = new(logger);
+        KlvManager.RegisterImplementation(new ST0601Standard(logger));
+    }
 
     /// <summary>
     /// Get the ordered list of data as Dictionnary.

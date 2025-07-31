@@ -50,13 +50,13 @@ internal class KlvToXls
                     for (int row = 0; row < data.Count; row++)
                     {
                         // for (int indexData = 0; indexData < data[row].Count; indexData++)
-                        foreach(KeyValuePair<int, KLVData> entry in data[row])
+                        foreach (KeyValuePair<int, KLVData> entry in data[row])
                         {
                             KLVData localData = entry.Value;
                             rawWorksheet.Cells[row + 1, 0] = new Cell(row);
                             processedWorksheet.Cells[row + 1, 0] = new Cell(row);
                             rawWorksheet.Cells[row + 1, localData.Key] = new Cell(string.Join(",", localData.Value));
-                            processedWorksheet.Cells[row + 1, localData.Key] = new Cell(st0601.KlvToStringOutput(localData));
+                            processedWorksheet.Cells[row + 1, localData.Key] = new Cell(st0601.ValueToStringOutput(localData));
                         }
                     }
                     rawWorksheet.Cells[0, 0] = new Cell("Id\\Tag");

@@ -15,6 +15,7 @@ public class KLVManagerTests
         using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
         ILogger logger = factory.CreateLogger("KLVManagerTests");
         Manager = new(logger);
+        Manager.RegisterImplementation(new ST0601Standard(logger));
     }
 
     [Test]
@@ -22,7 +23,7 @@ public class KLVManagerTests
     {
         Stream stream = new MemoryStream([0x6, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0, 0x1, 0x0]);
         BinaryReader reader = new(stream);
-        Assert.That(Manager.SeekToNextMessage(reader), Is.True);
+        Assert.That(Manager.SeekToNextSMPTEKnownMessage(reader), Is.True);
         Assert.That(stream.Position, Is.EqualTo(16));
     }
 
@@ -31,7 +32,7 @@ public class KLVManagerTests
     {
         Stream stream = new MemoryStream([0x0, 0x6, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0, 0x1, 0x0]);
         BinaryReader reader = new(stream);
-        Assert.That(Manager.SeekToNextMessage(reader), Is.True);
+        Assert.That(Manager.SeekToNextSMPTEKnownMessage(reader), Is.True);
         Assert.That(stream.Position, Is.EqualTo(17));
     }
 
@@ -40,7 +41,7 @@ public class KLVManagerTests
     {
         Stream stream = new MemoryStream([0x0, 0x0, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0, 0x1, 0x0]);
         BinaryReader reader = new(stream);
-        Assert.That(Manager.SeekToNextMessage(reader), Is.False);
+        Assert.That(Manager.SeekToNextSMPTEKnownMessage(reader), Is.False);
     }
 
     [Test]
@@ -88,6 +89,7 @@ public class KLVManagerTests
         testData.Length = 4;
         testData.Value = [0x54, 0x65, 0x73, 0x74];
         KLVData foundResult = result.GetValueOrDefault(3);
+        Assert.That(foundResult, Is.Not.Null);
         Assert.That(foundResult.Key, Is.EqualTo(3));
         Assert.That(foundResult.Length, Is.EqualTo(4));
         Assert.That(foundResult.Value, Is.EqualTo(testData.Value));
