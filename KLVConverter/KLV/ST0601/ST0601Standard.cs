@@ -90,7 +90,15 @@ public class ST0601Standard
     {
         if (ConverterMap.ContainsKey(input.Key))
         {
-            return ConverterMap.GetValueOrDefault(input.Key)?.Accept(input.Value);
+            try
+            {
+                return ConverterMap.GetValueOrDefault(input.Key)?.Accept(input.Value);
+            }
+            catch (IOException e)
+            {
+                Logger.LogError("Unable to convert value for Key: {key}, with length: {length}",input.Key, input.Length);
+                return "";
+            }
         }
         else
         {
