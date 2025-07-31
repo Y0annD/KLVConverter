@@ -20,6 +20,11 @@ public class KLVManager(ILogger logger)
     private readonly byte[] Ref_UL_KEY = [0x6, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0];
 
 
+    /// <summary>
+    /// Seek stream to next valid message based on Reference UL Key.
+    /// </summary>
+    /// <param name="reader">reader that contains data</param>
+    /// <returns></returns>
     public bool SeekToNextMessage(BinaryReader reader)
     {
         Logger.LogDebug("Seek to next message");
@@ -92,5 +97,48 @@ public class KLVManager(ILogger logger)
         }
         Logger.LogDebug("Length: {length}", value);
         return value;
+    }
+
+    /// <summary>
+    /// Read the next available KLV Message.
+    /// This method will automatically seek to next valid message.
+    /// </summary>
+    /// <param name="reader">Binary reader</param>
+    /// <returns>List of available KLV data for this message. If empty, no more messages are available</returns>
+    public Dictionary<int, KLVData> ReadNextKLVMessage(BinaryReader reader)
+    {
+        Dictionary<int, KLVData> message = [];
+        if (SeekToNextMessage(reader))
+        {
+            // get length of data for the current message
+            int length = ReadOidLength(reader);
+            Logger.LogDebug("Length: {length}", length);
+            byte[] value = new byte[length];
+            reader.Read(value);
+            Logger.LogDebug("Value: {value}", value);
+            int index = 0;
+            do
+            {
+                KLVData item = new()
+                {
+                    Key = value[index++],
+                    Length = value[index++]
+                };
+                item.Value = new byte[item.Length];
+                // Check that remaining length is sufficient to contains this tag value
+                if (index + item.Length > value.Length)
+                {
+                    // Item length is higher than remaining bytes to read
+                    Logger.LogWarning("Item length is higher than capacity for key {key} at stream position {position}. Remaining capacity: {remaining}, expected: {expected}", item.Key, reader.BaseStream.Position, value.Length - index, item.Length);
+                    continue;
+                }
+                Array.Copy(value, index, item.Value, 0, item.Length);
+                index += (int)item.Length;
+                message.Add(item.Key, item);
+                Logger.LogDebug("KLV Data: {klv}", item.ToString());
+
+            } while (index < value.Length);
+        }
+        return message;
     }
 }

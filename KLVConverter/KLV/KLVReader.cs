@@ -32,40 +32,15 @@ public class KLVReader(ILogger logger)
             Logger.LogInformation("{datafile}: {length} bytes", filePath, fs.Length);
             using BinaryReader binReader = new(fs);
             long position = fs.Position;
-            while (KlvManager.SeekToNextMessage(binReader))
+            Dictionary<int, KLVData> result;
+            do
             {
-                Logger.LogDebug("Key is ST0601 Key");
-                int length = KlvManager.ReadOidLength(binReader);
-                Logger.LogDebug("Length: {length}", length);
-                byte[] value = new byte[length];
-                binReader.Read(value);
-                Logger.LogDebug("Value: {value}", value);
-                Dictionary<int, KLVData> localData = [];
-                int index = 0;
-                do
+                result = KlvManager.ReadNextKLVMessage(binReader);
+                if (result.Count > 0)
                 {
-                    KLVData item = new()
-                    {
-                        Key = value[index++],
-                        Length = value[index++]
-                    };
-                    item.Value = new byte[item.Length];
-                    // Check that remaining length is sufficient to contains this tag value
-                    if (index + item.Length > value.Length)
-                    {
-                        // Item length is higher than remaining bytes to read
-                        Logger.LogWarning("Item length is higher than capacity for key {key} at stream position {position}. Remaining capacity: {remaining}, expected: {expected}", item.Key, fs.Position, value.Length - index, item.Length);
-                        continue;
-                    }
-                    Array.Copy(value, index, item.Value, 0, item.Length);
-                    index += (int)item.Length;
-                    localData.Add(item.Key, item);
-                    Logger.LogDebug("KLV Data: {klv}", item.ToString());
-
-                } while (index < value.Length);
-                data.Add(localData);
-                Logger.LogDebug("Position: {key}", fs.Position);
-            }
+                    data.Add(result);
+                }
+            } while (result.Count > 0);
         }
         return data;
     }

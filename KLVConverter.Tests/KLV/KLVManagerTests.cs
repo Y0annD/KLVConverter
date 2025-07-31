@@ -70,8 +70,26 @@ public class KLVManagerTests
 
         Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(0xFF));
 
-        reader = new(new MemoryStream([0x82,0xFF, 0xFF]));
+        reader = new(new MemoryStream([0x82, 0xFF, 0xFF]));
 
         Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(65535));
+    }
+
+    [Test]
+    public void TestReadNextKLVMessage()
+    {
+        BinaryReader reader = new(new MemoryStream([0x6, 0xE, 0x2B, 0x34, 0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0/* Lenth*/, 0x6/* Data */, 0x3, 0x4, 0x54, 0x65, 0x73, 0x74]));
+
+        Dictionary<int, KLVData> result = Manager.ReadNextKLVMessage(reader);
+
+        Assert.That(result.Count, Is.EqualTo(1));
+        KLVData testData = new();
+        testData.Key = 3;
+        testData.Length = 4;
+        testData.Value = [0x54, 0x65, 0x73, 0x74];
+        KLVData foundResult = result.GetValueOrDefault(3);
+        Assert.That(foundResult.Key, Is.EqualTo(3));
+        Assert.That(foundResult.Length, Is.EqualTo(4));
+        Assert.That(foundResult.Value, Is.EqualTo(testData.Value));
     }
 }
