@@ -13,3 +13,10 @@ This projets relates to following documents:
 | MISB ST1201| 5 | 24 June 2021 | Floating Point to Integer Mapping | [MISB ST1201.5](https://nsgreg.nga.mil/doc/view?i=5276)
 
 Most of the documents can be found on this portail: [NGA](https://nsgreg.nga.mil/misb.jsp)
+
+# Release
+
+## V1.0.1
+
+- Add of IMAPB KLV To softawre reading
+- Coverage test enhancement
