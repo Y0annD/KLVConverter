@@ -12,7 +12,7 @@ public class DataTypeConverterFacoryTests()
     [Test]
     public void TestString()
     {
-        Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.STRING, ST0601Datatype.UINT8)), Is.InstanceOf<StringDataTypeConverter>());
+        Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.STRING, ST0601Datatype.STRING)), Is.InstanceOf<StringDataTypeConverter>());
     }
 
     [Test]
@@ -39,5 +39,12 @@ public class DataTypeConverterFacoryTests()
     public void TestUnknown()
     {
         Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.LOCALSET, ST0601Datatype.LOCALSET)), Is.InstanceOf<DefaultDatatypeConverter>());
+    }
+
+    [Test]
+    public void TestIMAPB()
+    {
+        Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB)), Is.InstanceOf<IMAPBDataTypeConverter>());
+        Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.FLOAT64, ST0601Datatype.IMAPB)), Is.InstanceOf<IMAPBDataTypeConverter>());
     }
 }

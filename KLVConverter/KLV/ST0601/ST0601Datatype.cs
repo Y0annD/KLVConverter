@@ -13,5 +13,7 @@ public enum ST0601Datatype
     INT64,
     FLOAT32,
     FLOAT64,
+    IMAPA,
+    IMAPB,
     LOCALSET
 }

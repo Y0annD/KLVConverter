@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using KLVConverter.KLV.ST0601;
 using KLVConverter.KLV.ST0601.Converter;
 using Microsoft.Extensions.Logging;
@@ -10,15 +11,22 @@ public class ST0601Standard : ISMPTEImplementation
     /// <summary>
     /// Reference of logger.
     /// </summary>
-    ILogger Logger;
+    private readonly ILogger Logger;
 
     /// <summary>
     /// Model that contains attribute description
     /// </summary>
-    private Dictionary<int, ST0601ConverterStructure> ST0601Model = [];
+    private readonly Dictionary<int, ST0601ConverterStructure> ST0601Model = [];
 
-    private Dictionary<int, IConverter> ConverterMap = [];
+    /// <summary>
+    /// Map key to converter.
+    /// </summary>
+    private readonly Dictionary<int, IConverter> ConverterMap = [];
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="logger">reference logger</param>
     public ST0601Standard(ILogger logger)
     {
         Logger = logger;
@@ -47,14 +55,14 @@ public class ST0601Standard : ISMPTEImplementation
         ST0601Model.Add(23, new ST0601ConverterStructure("Frame Center Latitude", ST0601Datatype.FLOAT32, ST0601Datatype.INT32, 180d / 4294967294d));
         ST0601Model.Add(24, new ST0601ConverterStructure("Frame Center Longitude", ST0601Datatype.FLOAT32, ST0601Datatype.INT32, 360d / 4294967294d));
         ST0601Model.Add(25, new ST0601ConverterStructure("Frame Center Elevation", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 19900d / 65535d, -900));
-        ST0601Model.Add(26, new ST0601ConverterStructure("Offset Corner Latitude Point 1", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
-        ST0601Model.Add(27, new ST0601ConverterStructure("Offset Corner Longitude Point 1", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
-        ST0601Model.Add(28, new ST0601ConverterStructure("Offset Corner Latitude Point 2", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
-        ST0601Model.Add(29, new ST0601ConverterStructure("Offset Corner Longitude Point 2", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
-        ST0601Model.Add(30, new ST0601ConverterStructure("Offset Corner Latitude Point 3", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
-        ST0601Model.Add(31, new ST0601ConverterStructure("Offset Corner Longitude Point 3", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
-        ST0601Model.Add(32, new ST0601ConverterStructure("Offset Corner Latitude Point 4", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
-        ST0601Model.Add(33, new ST0601ConverterStructure("Offset Corner Longitude Point 4", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d/65534d));
+        ST0601Model.Add(26, new ST0601ConverterStructure("Offset Corner Latitude Point 1", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
+        ST0601Model.Add(27, new ST0601ConverterStructure("Offset Corner Longitude Point 1", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
+        ST0601Model.Add(28, new ST0601ConverterStructure("Offset Corner Latitude Point 2", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
+        ST0601Model.Add(29, new ST0601ConverterStructure("Offset Corner Longitude Point 2", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
+        ST0601Model.Add(30, new ST0601ConverterStructure("Offset Corner Latitude Point 3", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
+        ST0601Model.Add(31, new ST0601ConverterStructure("Offset Corner Longitude Point 3", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
+        ST0601Model.Add(32, new ST0601ConverterStructure("Offset Corner Latitude Point 4", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
+        ST0601Model.Add(33, new ST0601ConverterStructure("Offset Corner Longitude Point 4", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 0.15d / 65534d));
         ST0601Model.Add(34, new ST0601ConverterStructure("Icing Detected", ST0601Datatype.UINT8, ST0601Datatype.UINT8));
         ST0601Model.Add(35, new ST0601ConverterStructure("Wind direction", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 360d / 65535d));
         ST0601Model.Add(36, new ST0601ConverterStructure("Wind speed", ST0601Datatype.FLOAT32, ST0601Datatype.UINT8, 100d / 255d));
@@ -76,7 +84,7 @@ public class ST0601Standard : ISMPTEImplementation
         ST0601Model.Add(52, new ST0601ConverterStructure("Platform Sideslip angle", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 40d / 65534d));
         ST0601Model.Add(53, new ST0601ConverterStructure("Airfield Barometric pressure", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 5000d / 65535d));
         ST0601Model.Add(54, new ST0601ConverterStructure("Airfield Elevation", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 19900d / 65535d, -900));
-        ST0601Model.Add(55, new ST0601ConverterStructure("Relative Humidity", ST0601Datatype.FLOAT32, ST0601Datatype.UINT8, 100d/255d));
+        ST0601Model.Add(55, new ST0601ConverterStructure("Relative Humidity", ST0601Datatype.FLOAT32, ST0601Datatype.UINT8, 100d / 255d));
         ST0601Model.Add(56, new ST0601ConverterStructure("Platform Ground Speed", ST0601Datatype.UINT8, ST0601Datatype.UINT8));
         ST0601Model.Add(57, new ST0601ConverterStructure("Ground Range", ST0601Datatype.FLOAT64, ST0601Datatype.UINT32, 5000000d / 4294967295d));
         ST0601Model.Add(58, new ST0601ConverterStructure("Fuel Remaining", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 10000d / 65535d));
@@ -97,7 +105,7 @@ public class ST0601Standard : ISMPTEImplementation
         // TODO Item 73, RVT Local Set
         // TODO Item 74, VMTI Local Set
         ST0601Model.Add(75, new ST0601ConverterStructure("Sensor Ellipsoid Height", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 19900d / 65535d, -900));
-    ST0601Model.Add(76, new ST0601ConverterStructure("Alternate Platform Ellipsoid Height", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 19900d / 65535d, -900));
+        ST0601Model.Add(76, new ST0601ConverterStructure("Alternate Platform Ellipsoid Height", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 19900d / 65535d, -900));
         ST0601Model.Add(77, new ST0601ConverterStructure("Operational mode", ST0601Datatype.UINT8, ST0601Datatype.UINT8));
         ST0601Model.Add(78, new ST0601ConverterStructure("Frame Center Height Above Ellipsoid", ST0601Datatype.FLOAT32, ST0601Datatype.UINT16, 19900d / 65535d, -900));
         ST0601Model.Add(79, new ST0601ConverterStructure("Sensor North Velocity", ST0601Datatype.FLOAT32, ST0601Datatype.INT16, 654d / 65534d));
@@ -117,31 +125,31 @@ public class ST0601Standard : ISMPTEImplementation
         ST0601Model.Add(93, new ST0601ConverterStructure("Platform Sideslip Angle (Full)", ST0601Datatype.FLOAT64, ST0601Datatype.INT32, 360d / 4294967294d));
         // TODO Item 94, MIIS Core identifier
         // TODO Item 95, SAR Motion Imagery Local Set
-        // TODO Item 96, Target Width Extended
+        ST0601Model.Add(96, new ST0601ConverterStructure("Target Width Extended", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, max: 1500000));
         // TODO Item 97, Range Image Local Set
         // TODO Item 98, Geo-Registration Local Set
         // TODO Item 99, Composite Imaging Local Set
         // TODO Item 100, Segment Local Set
         // TODO Item 101, Amend Local Set
         // TODO Item 102, SDCC-FLP
-        // TODO Item 103, Density Altitude Extended
-        // TODO Item 104, Sensor Ellipsoid Height Extended
-        // TODO Item 105, Alternate Platform Ellipsoid Height Extended
+        ST0601Model.Add(103, new ST0601ConverterStructure("Density Altitude Extended", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, min: -900, max: 40000));
+        ST0601Model.Add(104, new ST0601ConverterStructure("Sensor Ellipsoid Height Extended", ST0601Datatype.FLOAT64, ST0601Datatype.IMAPB, min: -900, max: 40000));
+        ST0601Model.Add(105, new ST0601ConverterStructure("Alternate Platform Ellipsoid Height Extended", ST0601Datatype.FLOAT64, ST0601Datatype.IMAPB, min: -900, max: 40000));
         ST0601Model.Add(106, new ST0601ConverterStructure("Stream Designator", ST0601Datatype.STRING, ST0601Datatype.STRING));
         ST0601Model.Add(107, new ST0601ConverterStructure("Operational Base", ST0601Datatype.STRING, ST0601Datatype.STRING));
         ST0601Model.Add(108, new ST0601ConverterStructure("Broadcast source", ST0601Datatype.STRING, ST0601Datatype.STRING));
-        // TODO Item 109, Range to Recovery Location
+        ST0601Model.Add(109, new ST0601ConverterStructure("Range to recovery Location", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, max: 21000));
         ST0601Model.Add(110, new ST0601ConverterStructure("Time Airborne", ST0601Datatype.UINT32, ST0601Datatype.UINT8));
         ST0601Model.Add(111, new ST0601ConverterStructure("Propulsion Unit Speed", ST0601Datatype.UINT32, ST0601Datatype.UINT8));
-        // TODO Item 112, Platform Course Angle
-        // TODO Item 113, Altitude AGL
-        // TODO Item 114, Radar altimeter
+        ST0601Model.Add(112, new ST0601ConverterStructure("Platform Course Angle", ST0601Datatype.FLOAT64, ST0601Datatype.IMAPB, max: 360));
+        ST0601Model.Add(113, new ST0601ConverterStructure("Altitude AGL", ST0601Datatype.FLOAT64, ST0601Datatype.IMAPB, min: -900, max: 40000));
+        ST0601Model.Add(114, new ST0601ConverterStructure("Radar Altimeter", ST0601Datatype.FLOAT64, ST0601Datatype.IMAPB, min: -900, max: 40000));
         // TODO Item 115, Control Command
         // TODO Item 116, Control Command Verification List
-        // TODO Item 117, Sensor Azimuth Rate
-        // TODO Item 118, Sensor Elevation Rate
-        // TODO Item 119, Sensor Roll Rate
-        // TODO Item 120, On-Board MI Storage Percent Full
+        ST0601Model.Add(117, new ST0601ConverterStructure("Sensor Azimuth Rate", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, min: -1000d, max: 1000d));
+        ST0601Model.Add(118, new ST0601ConverterStructure("Sensor Elevation Rate", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, min: -1000d, max: 1000d));
+        ST0601Model.Add(119, new ST0601ConverterStructure("Sensor Roll Rate", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, min: -1000d, max: 1000d));
+        ST0601Model.Add(120, new ST0601ConverterStructure("On Board MI Storage Percent Full", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, max: 100d));
         // TODO Item 121, Active Wavelength List
         // TODO Item 122, Country codes
         ST0601Model.Add(123, new ST0601ConverterStructure("Number of Navsats in view", ST0601Datatype.UINT8, ST0601Datatype.UINT8));
@@ -153,9 +161,9 @@ public class ST0601Standard : ISMPTEImplementation
         ST0601Model.Add(129, new ST0601ConverterStructure("Target Id", ST0601Datatype.STRING, ST0601Datatype.STRING));
         // TODO Item 130, Airbase Locations
         ST0601Model.Add(131, new ST0601ConverterStructure("Take-off time", ST0601Datatype.UINT64, ST0601Datatype.UINT8));
-        // TODO Item 132, Transmision Frequency
+        ST0601Model.Add(132, new ST0601ConverterStructure("Transmission Frequency", ST0601Datatype.FLOAT64, ST0601Datatype.IMAPB, min: 1, max: 99999));
         ST0601Model.Add(133, new ST0601ConverterStructure("On-Board MI Storage Capacity", ST0601Datatype.UINT32, ST0601Datatype.UINT8));
-        // TODO Item 134, zoom percentage
+        ST0601Model.Add(134, new ST0601ConverterStructure("Zoom percentage", ST0601Datatype.FLOAT32, ST0601Datatype.IMAPB, max: 100));
         ST0601Model.Add(135, new ST0601ConverterStructure("Communications method", ST0601Datatype.STRING, ST0601Datatype.STRING));
         ST0601Model.Add(136, new ST0601ConverterStructure("Leap Seconds", ST0601Datatype.INT32, ST0601Datatype.UINT8));
         ST0601Model.Add(137, new ST0601ConverterStructure("Correction Offset", ST0601Datatype.INT64, ST0601Datatype.INT8));
@@ -165,7 +173,7 @@ public class ST0601Standard : ISMPTEImplementation
         // TODO Item 141, Waypoint List
         // TODO Item 142, view domain
         // TODO Item 143, Metadata substream id pack
-        
+
 
         // Init converter map
         foreach (KeyValuePair<int, ST0601ConverterStructure> entry in ST0601Model)
@@ -174,6 +182,10 @@ public class ST0601Standard : ISMPTEImplementation
         }
     }
 
+    /// <summary>
+    /// Get ST0601 Designator
+    /// </summary>
+    /// <returns>ST0601 Designator</returns>
     public byte[] GetDesignator()
     {
         return [0x2, 0xB, 0x1, 0x1, 0xE, 0x1, 0x3, 0x1, 0x1, 0x0, 0x0, 0x0];

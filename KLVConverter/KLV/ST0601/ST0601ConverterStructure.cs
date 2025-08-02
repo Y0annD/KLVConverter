@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace KLVConverter.KLV.ST0601;
 
 
-public class ST0601ConverterStructure(string name, ST0601Datatype type, ST0601Datatype klvType, double lsb = 1, double offset = 0)
+public class ST0601ConverterStructure(string name, ST0601Datatype type, ST0601Datatype klvType, double lsb = 1, double offset = 0, double min=0, double max=0)
 {
     /// <summary>
     /// Name of the structure
@@ -24,4 +26,12 @@ public class ST0601ConverterStructure(string name, ST0601Datatype type, ST0601Da
     /// Offset to apply to a software type after conversion
     /// </summary>
     public double Offset { get; set; } = offset;
+    /// <summary>
+    /// Minimum value for the attribute
+    /// </summary>
+    public double MinValue { get; set; } = min;
+    /// <summary>
+    /// Maximum value for the attribute
+    /// </summary>
+    public double MaxValue { get; set; } = max;
 }

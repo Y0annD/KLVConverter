@@ -9,7 +9,7 @@ public class DataTypeConverterFactory
     /// <returns></returns>
     public static IConverter GetConverterForDataType(ST0601ConverterStructure structure)
     {
-        switch (structure.Type)
+        switch (structure.KLVType)
         {
             case ST0601Datatype.STRING:
                 {
@@ -24,7 +24,33 @@ public class DataTypeConverterFactory
             case ST0601Datatype.INT32:
             case ST0601Datatype.INT64:
                 {
-                    return new IntDataTypeConverter(structure.KLVType, structure.Type, structure.LSB);
+                    switch (structure.Type)
+                    {
+                        case ST0601Datatype.FLOAT32:
+                        case ST0601Datatype.FLOAT64:
+                            {
+                                return new FloatDataTypeConverter(structure.KLVType, structure.Type, structure.LSB);
+                        }
+                        case ST0601Datatype.INT8:
+                        case ST0601Datatype.UINT8:
+                        case ST0601Datatype.UINT16:
+                        case ST0601Datatype.UINT32:
+                        case ST0601Datatype.UINT64:
+                        case ST0601Datatype.INT16:
+                        case ST0601Datatype.INT32:
+                        case ST0601Datatype.INT64:
+                        default:
+                            {
+
+                                return new IntDataTypeConverter(structure.KLVType, structure.Type, structure.LSB);
+                            }
+                            
+                    }
+                }
+            case ST0601Datatype.IMAPB:
+                {
+
+                    return new IMAPBDataTypeConverter(structure.MinValue, structure.MaxValue);
                 }
             case ST0601Datatype.FLOAT32:
             case ST0601Datatype.FLOAT64:
