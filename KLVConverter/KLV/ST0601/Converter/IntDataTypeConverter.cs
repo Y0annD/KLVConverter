@@ -33,12 +33,13 @@ public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, d
         Array.Reverse(newData);
         switch (Input)
         {
+            case ST0601Datatype.INT8:
             case ST0601Datatype.UINT8:
                 {
                     CheckArrayLength(newData, 1);
                     value = newData[0];
                     break;
-                }
+            }
             case ST0601Datatype.UINT16:
                 {
                     CheckArrayLength(newData, 2);

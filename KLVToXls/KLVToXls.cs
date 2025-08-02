@@ -61,7 +61,7 @@ internal class KlvToXls
                     }
                     rawWorksheet.Cells[0, 0] = new Cell("Id\\Tag");
                     processedWorksheet.Cells[0, 0] = new Cell("Id\\Tag");
-                    for (int tagIndex = 1; tagIndex < 128; tagIndex++)
+                    for (int tagIndex = 1; tagIndex < 255; tagIndex++)
                     {
                         rawWorksheet.Cells[0, tagIndex] = new Cell(st0601.GetTagName(tagIndex));
                         processedWorksheet.Cells[0, tagIndex] = new Cell(st0601.GetTagName(tagIndex));

@@ -15,12 +15,14 @@ public class DataTypeConverterFactory
                 {
                     return new StringDataTypeConverter();
                 }
+            case ST0601Datatype.INT8:
             case ST0601Datatype.UINT8:
             case ST0601Datatype.UINT16:
             case ST0601Datatype.UINT32:
             case ST0601Datatype.UINT64:
             case ST0601Datatype.INT16:
             case ST0601Datatype.INT32:
+            case ST0601Datatype.INT64:
                 {
                     return new IntDataTypeConverter(structure.KLVType, structure.Type, structure.LSB);
                 }

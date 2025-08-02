@@ -22,8 +22,10 @@ public class DataTypeConverterFacoryTests()
         Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.UINT16, ST0601Datatype.UINT8)), Is.InstanceOf<IntDataTypeConverter>());
         Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.UINT32, ST0601Datatype.UINT8)), Is.InstanceOf<IntDataTypeConverter>());
         Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.UINT64, ST0601Datatype.UINT8)), Is.InstanceOf<IntDataTypeConverter>());
+        Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.INT8, ST0601Datatype.INT8)), Is.InstanceOf<IntDataTypeConverter>());
         Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.INT16, ST0601Datatype.UINT8)), Is.InstanceOf<IntDataTypeConverter>());
         Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.INT32, ST0601Datatype.UINT8)), Is.InstanceOf<IntDataTypeConverter>());
+        Assert.That(DataTypeConverterFactory.GetConverterForDataType(new ST0601ConverterStructure("", ST0601Datatype.INT64, ST0601Datatype.UINT8)), Is.InstanceOf<IntDataTypeConverter>());
     }
 
     [Test]
