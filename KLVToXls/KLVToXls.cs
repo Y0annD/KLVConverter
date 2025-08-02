@@ -42,7 +42,7 @@ internal class KlvToXls
                 if (File.Exists(datafile))
                 {
                     Logger.LogInformation("Process {file} datafile", datafile);
-                    List<Dictionary<int, KLVData>> data = reader.ReadFile(datafile);
+                    List<SMPTEMessage> data = reader.ReadFile(datafile);
 
                     Workbook workbook = new Workbook();
                     Worksheet rawWorksheet = new Worksheet("RawKLVData");
@@ -50,7 +50,7 @@ internal class KlvToXls
                     for (int row = 0; row < data.Count; row++)
                     {
                         // for (int indexData = 0; indexData < data[row].Count; indexData++)
-                        foreach (KeyValuePair<int, KLVData> entry in data[row])
+                        foreach (KeyValuePair<int, KLVData> entry in data[row].GetDatas())
                         {
                             KLVData localData = entry.Value;
                             rawWorksheet.Cells[row + 1, 0] = new Cell(row);

@@ -31,23 +31,23 @@ public class KLVReader
     /// </summary>
     /// <param name="filePath">File to read</param>
     /// <returns>List of KLVData in this file</returns>
-    public List<Dictionary<int, KLVData>> ReadFile(string filePath)
+    public List<SMPTEMessage> ReadFile(string filePath)
     {
-        List<Dictionary<int, KLVData>> data = [];
+        List<SMPTEMessage> data = [];
         using (FileStream fs = new(@filePath, FileMode.Open))
         {
             Logger.LogInformation("{datafile}: {length} bytes", filePath, fs.Length);
             using BinaryReader binReader = new(fs);
             long position = fs.Position;
-            Dictionary<int, KLVData> result;
+            SMPTEMessage? result;
             do
             {
                 result = KlvManager.ReadNextKLVMessage(binReader);
-                if (result.Count > 0)
+                if (null != result)
                 {
                     data.Add(result);
                 }
-            } while (result.Count > 0);
+            } while (result != null);
         }
         return data;
     }

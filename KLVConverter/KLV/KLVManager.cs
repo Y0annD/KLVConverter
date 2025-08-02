@@ -22,23 +22,23 @@ public class KLVManager(ILogger logger)
     public Dictionary<byte[], ISMPTEImplementation> Implementations = [];
 
 
-    public bool SpecificULKeyFound(byte[] key)
+    public byte[] SpecificULKeyFound(byte[] key)
     {
         foreach (byte[] implementation in Implementations.Keys)
         {
             if (StructuralComparisons.StructuralEqualityComparer.Equals(implementation, key))
             {
-                return true;
+                return implementation;
             }
         }
-        return false;
+        return [];
     }
     /// <summary>
     /// Seek stream to next valid message based on Reference UL Key.
     /// </summary>
     /// <param name="reader">reader that contains data</param>
     /// <returns></returns>
-    public bool SeekToNextSMPTEKnownMessage(BinaryReader reader)
+    public byte[] SeekToNextSMPTEKnownMessage(BinaryReader reader)
     {
         Logger.LogDebug("Seek to next message");
         byte[] ulKey = new byte[ST298_Ref.Length];
@@ -50,11 +50,11 @@ public class KLVManager(ILogger logger)
             nbRead = reader.Read(ulKey);
             nbRead += reader.Read(specificKey);
             bool smpteFound = StructuralComparisons.StructuralEqualityComparer.Equals(ST298_Ref, ulKey);
-            bool specificFound = SpecificULKeyFound(specificKey);
-            if (StructuralComparisons.StructuralEqualityComparer.Equals(ST298_Ref, ulKey) && SpecificULKeyFound(specificKey))
+            byte[] specificFound = SpecificULKeyFound(specificKey);
+            if (smpteFound && specificFound.Length > 0)
             {
                 Logger.LogDebug("Message found");
-                return true;
+                return specificFound;
             }
             else
             {
@@ -79,7 +79,7 @@ public class KLVManager(ILogger logger)
             }
         } while (nbRead > 0);
         Logger.LogInformation("No more message found");
-        return false;
+        return [];
     }
 
     /// <summary>
@@ -122,11 +122,12 @@ public class KLVManager(ILogger logger)
     /// </summary>
     /// <param name="reader">Binary reader</param>
     /// <returns>List of available KLV data for this message. If empty, no more messages are available</returns>
-    public Dictionary<int, KLVData> ReadNextKLVMessage(BinaryReader reader)
+    public SMPTEMessage? ReadNextKLVMessage(BinaryReader reader)
     {
-        Dictionary<int, KLVData> message = [];
-        if (SeekToNextSMPTEKnownMessage(reader))
+        byte[] specificUlKey = SeekToNextSMPTEKnownMessage(reader);
+        if (specificUlKey.Length > 0)
         {
+            SMPTEMessage message = new(specificUlKey);
             // get length of data for the current message
             int length = ReadOidLength(reader);
             Logger.LogDebug("Length: {length}", length);
@@ -151,14 +152,19 @@ public class KLVManager(ILogger logger)
                 }
                 Array.Copy(value, index, item.Value, 0, item.Length);
                 index += (int)item.Length;
-                message.Add(item.Key, item);
+                message.AddKLVData(item);
                 Logger.LogDebug("KLV Data: {klv}", item.ToString());
 
             } while (index < value.Length);
+            return message;
         }
-        return message;
+        return null;
     }
 
+    /// <summary>
+    /// Register known SMPTE implementation standard.
+    /// </summary>
+    /// <param name="implementation">Implementation of SMPTE Standard</param>
     public void RegisterImplementation(ISMPTEImplementation implementation)
     {
         Implementations.Add(implementation.GetDesignator(), implementation);
