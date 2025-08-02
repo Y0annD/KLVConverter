@@ -34,12 +34,17 @@ public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, d
         switch (Input)
         {
             case ST0601Datatype.INT8:
+                {
+                    CheckArrayLength(newData, 1);
+                    value = unchecked((sbyte)newData[0]);
+                    break;
+                }
             case ST0601Datatype.UINT8:
                 {
                     CheckArrayLength(newData, 1);
                     value = newData[0];
                     break;
-            }
+                }
             case ST0601Datatype.UINT16:
                 {
                     CheckArrayLength(newData, 2);
@@ -64,13 +69,20 @@ public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, d
                     value = BitConverter.ToUInt32(newData);
                     break;
                 }
+            case ST0601Datatype.INT64:
+                {
+                    CheckArrayLength(newData, 8);
+                    return Convert.ToString(BitConverter.ToInt64(newData) + Offset);
+
+                }
             case ST0601Datatype.UINT64:
                 {
                     CheckArrayLength(newData, 8);
                     return Convert.ToString(BitConverter.ToUInt64(newData) + (ulong)Offset);
 
                 }
-            default: break;
+            default:
+                break;
         }
         return Convert.ToString(value * LSB + Offset);
     }

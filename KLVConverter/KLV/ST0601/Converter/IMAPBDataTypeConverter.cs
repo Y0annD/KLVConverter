@@ -41,6 +41,11 @@ public class IMAPBDataTypeConverter(double min, double max) : IConverter
                 byte[] d = [data[2], data[1], data[0], 0];
                 y = BitConverter.ToUInt32(d);
             }
+            else if (data.Length == 4)
+            {
+                Array.Reverse(data);
+                y = BitConverter.ToUInt32(data);
+            }
             double bPow = Math.Ceiling(Math.Log2(Max - Min));
             double dPow = 8 * data.Length - 1;
             double sf = Math.Pow(2, dPow - bPow);

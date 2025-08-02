@@ -8,7 +8,13 @@ public class IMAPBConverterTests
     [SetUp]
     public void SetUp()
     {
+    }
 
+    [Test]
+    public void SimpleIMAPB2ByteTest()
+    {
+        IMAPBDataTypeConverter converter2 = new(-1000, 1000);
+        Assert.That(converter2.Accept([0x3E, 0x90]), Is.EqualTo(Convert.ToString(1)));
     }
 
     [Test]
@@ -21,11 +27,12 @@ public class IMAPBConverterTests
     }
 
     [Test]
-    public void SimpleIMAPB2ByteTest()
+    public void SimpleIMAPB4ByteTest()
     {
-        IMAPBDataTypeConverter converter2 = new(-1000, 1000);
-        Assert.That(converter2.Accept([0x3E, 0x90]), Is.EqualTo(Convert.ToString(1)));
+        IMAPBDataTypeConverter converter = new(0, 1500000);
+        Assert.That(converter.Accept([0x0, 0x0, 0xD9, 0x2A]), Is.EqualTo(Convert.ToString(54.291015625)));
     }
+
 
     [Test]
     public void SpecialValuesTest()
