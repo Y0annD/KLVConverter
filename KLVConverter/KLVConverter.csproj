@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>KLVConverter</PackageId>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Y0annD/KLVConverter</RepositoryUrl>
     <Version>1.0.1</Version>
     <Authors>Yoann Diquélou</Authors>
     <Description>Library to decode SMPTE and ST0601 messages</Description>
