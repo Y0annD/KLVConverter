@@ -20,3 +20,14 @@ Most of the documents can be found on this portail: [NGA](https://nsgreg.nga.mil
 
 - Add of IMAPB KLV To softawre reading
 - Coverage test enhancement
+
+# Documentation
+
+The documentation __asciidoc__ sources are available in __doc__ directory.
+
+To build the documentation, use the following commands:
+
+```bash
+chmod +x builddoc.sh
+./builddoc.sh
+```

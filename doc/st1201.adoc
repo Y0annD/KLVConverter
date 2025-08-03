@@ -1,0 +1,35 @@
+== MISB ST1201.5 Floating Point to Integer Mapping
+
+This standard describes the method for mapping floating-point values to integer values and the
+reverse, mapping integer values back to their original floating-point value to within an acceptable
+precision
+
+=== Algorithm principle
+
+The following principles underlie that IMAP Algorithm:
+
+* The binary representation of a floating-point value is an IEEE 754-2008 binary
+interchange format floating-point value.
+* The algorithm performs the mapping based on a [user] specified floating-point range
+from a min value to a max value – inclusive (including the end points).
+* The algorithm is a linear mapping from a floating-point value to a non-negative integer
+value of [user] defined length in bytes.
+* The binary representation of a non-negative integer value is in the format of a standard
+unsigned integer, with the length, in bytes, defined by the [user’s] implementing Parent
+Document.
+* The algorithm provides an inverse mapping from a non-negative integer value to the
+original floating-point value within a [user] specified precision. (Note: the mapping
+algorithm can supply better precision than what the user specifies. The defined length and
+precision are related – given one the other can be computed but both cannot be specified
+by the user).
+* If the [users] floating-point range includes 0.0, then the algorithm maps 0.0 exactly to a
+specific integer value, called a “zero offset.”
+* All negative floating-point values map to an integer that is less that the zero offset.
+* All positive floating-point values map to values greater than or equal to the zero offset.
+* The resulting format provides a set of special values which map to the IEEE 754-2008
+special values, including: ± infinity, ±QNan and ±SNan (note: negative zero is not
+included in this requirement).
+* The resulting format provides a bit space for custom signals to be sent by the user as
+defined by the [users] implementing Parent Document (e.g., MISB ST 0601).
+* The algorithm is designed for fewest operations as possible (during the actual mapping)
+for computational efficiency.

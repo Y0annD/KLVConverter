@@ -1,0 +1,55 @@
+= KLVConverter
+:version: @VERSION@
+Yoann Diquélou <yoann.diquelou@gmail.com>
+{version}, {docdate} - KLVConverter documentation
+:toc:
+:preface-title: Preface
+:icons: font
+:url-quickref: https://github.com/Y0annD/KLVConverter
+:doctype: book
+ifdef::backend-pdf[]
+:pdf-theme: main
+:pdf-themesdir: {docdir}
+:source-highlighter: rouge
+//:rouge-style: github
+endif::[]
+
+[%notitle]
+--
+[abstract]
+{description}
+--
+
+== Introduction
+
+The aim of this library was initial to read content of __STANAG 4601__ data in a video stream.
+
+The library will allow to be extended for specific usages but it's not encouraged to use this one in production as it was not tested with real data.
+
+The library is quite easy to use and was design to be efficient for reading files. It might work on network stream, but was not tested yet.
+
+It was design to avoid usage of any specif library outside of native __C#__ library.
+
+include::todo.adoc[]
+
+include::lexicon.adoc[]
+
+include::reference_doc.adoc[]
+
+include::releases_notes.adoc[]
+
+== Standards
+
+The following stadards are applied.
+
+include::st336.adoc[]
+
+include::st1201.adoc[]
+
+
+
+== Import the library in your solution
+
+WARNING: This section is not ready yet
+
+include::usage.adoc[]

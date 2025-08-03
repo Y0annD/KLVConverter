@@ -1,0 +1,7 @@
+== TodoList
+
+Following thins are not implemented yet:
+
+- [ ] Read inner data (e.g VMTI)
+- [ ] Read network stream
+- [ ] Write stream

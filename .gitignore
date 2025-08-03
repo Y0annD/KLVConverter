@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 # Excel files
 *.xls
 *.xlsx
+
+# Documentation
+*.pdf

@@ -1,0 +1,26 @@
+== How does the library works
+
+The first step is to create a logger, because logging is important to debug or retrieve information if needed.
+
+[source,C#]
+----
+using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+Logger = factory.CreateLogger("KLVConverter");
+----
+
+The second thing to do is to open the file (or stream) to read as stream.
+
+[source,C#]
+----
+using (FileStream fs = new(@filePath, FileMode.Open)) {
+    using BinaryReader binReader = new(fs);
+}
+----
+
+Important things is to open the file in **Open** mode. There is not any reason to write in this file. (for the moment).
+
+Then the library use __BinaryReader__ to be able to read large files.
+
+
+The second thing to do is to add the __Manager__, that do all work of file reading.
+

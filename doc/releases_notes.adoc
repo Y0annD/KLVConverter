@@ -1,0 +1,6 @@
+== Releases notes
+
+=== V1.0.1
+
+- Add of IMAPB KLV To softawre reading
+- Coverage test enhancement

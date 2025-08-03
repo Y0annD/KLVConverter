@@ -1,0 +1,15 @@
+== Lexicon
+
+[horizontal]
+IEEE::
+Institute of Electrical and Electronics Engineers
+KLV::
+Key Length Value
+OID::
+Object Identifier
+SMPTE::
+Society of Motion Picture and Television Engineers
+STANAG::
+Standardization Agreement
+UL::
+Universal Label
