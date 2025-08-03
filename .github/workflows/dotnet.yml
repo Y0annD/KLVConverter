@@ -20,9 +20,23 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+        source-url: https://nuget.pkg.github.com/Y0annD/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Release KLVConverter
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Upload dotnet test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: dotnet-results-9.0.x
+        path: TestResults-9.0.x
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
+    - name: Create the package
+      run: dotnet pack --configuration release KLVConverter
+    - name: Publish the package to GPR
+      run: dotnet nuget push KLVConverter/bin/Release/*.nupkg
