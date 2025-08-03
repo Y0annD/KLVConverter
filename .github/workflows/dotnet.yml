@@ -39,6 +39,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release KLVConverter
     - name: Create the package
-      run: dotnet pack --configuration release KLVConverter
+      run: dotnet pack --configuration Release KLVConverter
     - name: Publish the package to GPR
       run: dotnet nuget push KLVConverter/bin/Release/*.nupkg
