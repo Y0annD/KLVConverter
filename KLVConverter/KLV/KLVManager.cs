@@ -155,7 +155,7 @@ public class KLVManager(ILogger logger)
                 message.AddKLVData(item);
                 Logger.LogDebug("KLV Data: {klv}", item.ToString());
 
-            } while (index < value.Length);
+            } while (index < value.Length - 1); // Add -1 cause we have to read key and length values
             return message;
         }
         return null;
