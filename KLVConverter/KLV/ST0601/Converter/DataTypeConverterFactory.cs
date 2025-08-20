@@ -29,7 +29,7 @@ public class DataTypeConverterFactory
                         case ST0601Datatype.FLOAT32:
                         case ST0601Datatype.FLOAT64:
                             {
-                                return new FloatDataTypeConverter(structure.KLVType, structure.Type, structure.LSB);
+                                return new FloatDataTypeConverter(structure.KLVType, structure.Type, structure.LSB, structure.Offset);
                         }
                         case ST0601Datatype.INT8:
                         case ST0601Datatype.UINT8:
@@ -42,7 +42,7 @@ public class DataTypeConverterFactory
                         default:
                             {
 
-                                return new IntDataTypeConverter(structure.KLVType, structure.Type, structure.LSB);
+                                return new IntDataTypeConverter(structure.KLVType, structure.Type, structure.LSB, structure.Offset);
                             }
                             
                     }

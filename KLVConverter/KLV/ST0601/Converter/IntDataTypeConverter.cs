@@ -6,7 +6,7 @@ namespace KLVConverter.KLV.ST0601.Converter;
 /// <param name="input">input type</param>
 /// <param name="output">output type</param>
 /// <param name="lsb">lsb value</param>
-public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, double lsb = 1, int offset = 0) : IConverter
+public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, double lsb = 1, double offset = 0) : IConverter
 {
     /// <summary>
     /// Input data type.
@@ -24,7 +24,7 @@ public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, d
     /// <summary>
     /// Offset to output data value
     /// </summary>
-    private int Offset { get; set; } = offset;
+    private double Offset { get; set; } = offset;
 
     public string Accept(byte[] data)
     {
