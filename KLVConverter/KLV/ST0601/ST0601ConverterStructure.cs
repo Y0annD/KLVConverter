@@ -1,9 +1,8 @@
-using System.ComponentModel.DataAnnotations;
 
 namespace KLVConverter.KLV.ST0601;
 
 
-public class ST0601ConverterStructure(string name, ST0601Datatype type, ST0601Datatype klvType, double lsb = 1, double offset = 0, double min=0, double max=0)
+public class ST0601ConverterStructure(string name,  Type softwareType, ST0601Datatype type, double lsb = 1, double offset = 0, double min=0, double max=0): IConverterStructure
 {
     /// <summary>
     /// Name of the structure
@@ -12,11 +11,11 @@ public class ST0601ConverterStructure(string name, ST0601Datatype type, ST0601Da
     /// <summary>
     /// Software type of the structure
     /// </summary>
-    public ST0601Datatype Type { get; set; } = type;
+    public Type SoftwareType { get;  set; } = softwareType;
     /// <summary>
     /// KLV input type
     /// </summary>
-    public ST0601Datatype KLVType { get; set; } = klvType;
+    public ST0601Datatype KLVType { get;  set; } = type;
 
     /// <summary>
     /// LSB to apply for a KLV input
@@ -34,4 +33,14 @@ public class ST0601ConverterStructure(string name, ST0601Datatype type, ST0601Da
     /// Maximum value for the attribute
     /// </summary>
     public double MaxValue { get; set; } = max;
+
+    public ST0601Datatype GetBinaryType()
+    {
+        return KLVType;
+    }
+
+    public Type GetSoftwareType()
+    {
+        return SoftwareType;
+    }
 }

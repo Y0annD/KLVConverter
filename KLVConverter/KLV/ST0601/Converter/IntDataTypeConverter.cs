@@ -4,9 +4,9 @@ namespace KLVConverter.KLV.ST0601.Converter;
 /// Convert byte array to int value.
 /// </summary>
 /// <param name="input">input type</param>
-/// <param name="output">output type</param>
+/// <param name="softwareType">software type</param>
 /// <param name="lsb">lsb value</param>
-public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, double lsb = 1, double offset = 0) : IConverter
+public class IntDataTypeConverter(ST0601Datatype input, Type softwareType, double lsb = 1, double offset = 0) : IConverter
 {
     /// <summary>
     /// Input data type.
@@ -15,7 +15,7 @@ public class IntDataTypeConverter(ST0601Datatype input, ST0601Datatype output, d
     /// <summary>
     /// Output data type.
     /// </summary>
-    private ST0601Datatype Output { get; set; } = output;
+    private Type Output { get; set; } = softwareType;
     /// <summary>
     /// Less Significant Byte value.
     /// </summary>

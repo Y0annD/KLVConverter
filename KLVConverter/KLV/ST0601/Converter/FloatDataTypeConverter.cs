@@ -4,14 +4,14 @@ namespace KLVConverter.KLV.ST0601.Converter;
 /// Convert byte array to float value
 /// </summary>
 /// <param name="input">input type</param>
-/// <param name="output">output type</param>
+/// <param name="softwareType">softwareType type</param>
 /// <param name="lsb">value lsb</param>
 /// <param name="offset">offset to apply to the output value</param>
-public class FloatDataTypeConverter(ST0601Datatype input, ST0601Datatype output, double lsb, double offset = 0) : IConverter
+public class FloatDataTypeConverter(ST0601Datatype input, Type softwareType, double lsb, double offset = 0) : IConverter
 {
 
     public ST0601Datatype Input { get; set; } = input;
-    public ST0601Datatype Output { get; set; } = output;
+    public Type SoftwareType { get; set; } = softwareType;
     public double LSB { get; set; } = lsb;
     public double Offset { get; set; } = offset;
     public string Accept(byte[] data)

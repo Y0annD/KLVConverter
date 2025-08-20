@@ -12,7 +12,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestWithBadInputType()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.STRING, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.STRING,typeof(float), 0.5, 0);
 
         Assert.That(dc.Accept([0, 0x14]), Is.EqualTo("0"));
         Assert.That(dc.Accept([0xFF, 0xFF]), Is.EqualTo("0"));
@@ -22,7 +22,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestSimpleUINT16ToFloat()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16,typeof(float), 0.5, 0);
 
         Assert.That(dc.Accept([0, 0]), Is.EqualTo("0"));
         Assert.That(dc.Accept([0, 1]), Is.EqualTo(Convert.ToString(0.5)));
@@ -32,7 +32,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestSimpleUINT16ToFloatWithOffset()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 1);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16,typeof(float), 0.5, 1);
 
         Assert.That(dc.Accept([0, 0]), Is.EqualTo("1"));
         Assert.That(dc.Accept([0, 1]), Is.EqualTo(Convert.ToString(1.5)));
@@ -41,7 +41,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestUINT16ToFloatError()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT16,typeof(float), 0.5, 0);
 
         IOException exception = Assert.Throws<IOException>(() => { dc.Accept([0]); });
         Assert.That(exception.Message, Is.EqualTo("Insufficient array length. Expected 2 but was 1"));
@@ -50,7 +50,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestSimpleINT16ToFloat()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT16,typeof(float), 0.5, 0);
 
         Assert.That(dc.Accept([0, 0]), Is.EqualTo("0"));
         Assert.That(dc.Accept([0, 1]), Is.EqualTo(Convert.ToString(0.5)));
@@ -60,7 +60,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestINT16ToFloatError()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT16, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT16,typeof(float), 0.5, 0);
 
         IOException exception = Assert.Throws<IOException>(() => { dc.Accept([0]); });
         Assert.That(exception.Message, Is.EqualTo("Insufficient array length. Expected 2 but was 1"));
@@ -69,7 +69,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestSimpleUINT32ToFloat()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT32, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT32,typeof(float), 0.5, 0);
 
         Assert.That(dc.Accept([0, 0, 0, 0]), Is.EqualTo("0"));
         Assert.That(dc.Accept([0, 0, 0, 1]), Is.EqualTo(Convert.ToString(0.5)));
@@ -79,7 +79,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestUINT32ToFloatError()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT32, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.UINT32,typeof(float), 0.5, 0);
 
         IOException exception = Assert.Throws<IOException>(() => { dc.Accept([0, 0, 0]); });
         Assert.That(exception.Message, Is.EqualTo("Insufficient array length. Expected 4 but was 3"));
@@ -88,7 +88,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestSimpleINT32ToFloat()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT32, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT32,typeof(float), 0.5, 0);
 
         Assert.That(dc.Accept([0, 0, 0, 0]), Is.EqualTo("0"));
         Assert.That(dc.Accept([0, 0, 0, 1]), Is.EqualTo(Convert.ToString(0.5)));
@@ -98,7 +98,7 @@ public class FloatDatatypeConverterTests
     [Test]
     public void TestINT32ToFloatError()
     {
-        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT32, KLVConverter.KLV.ST0601.ST0601Datatype.FLOAT32, 0.5, 0);
+        FloatDataTypeConverter dc = new(KLVConverter.KLV.ST0601.ST0601Datatype.INT32,typeof(float), 0.5, 0);
 
         IOException exception = Assert.Throws<IOException>(() => { dc.Accept([0, 0, 0]); });
         Assert.That(exception.Message, Is.EqualTo("Insufficient array length. Expected 4 but was 3"));
