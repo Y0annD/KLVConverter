@@ -117,6 +117,41 @@ public class KLVManager(ILogger logger)
     }
 
     /// <summary>
+    /// Read Basic Encoding Rule OID Length.
+    /// If MSB of the first byte is one, it's an long encoded length.
+    /// In this case, this byte means the number of bytes to read to retrieve length
+    /// Else, this is the length
+    /// </summary>
+    /// <param name="array">byte array</param>
+    /// <param name="index">index in the array</param>
+    /// <returns></returns>
+    public int ReadOidLengthFromByteArray(byte[] array, ref int index)
+    {
+        int value = 0;
+        int read;
+        read = array[index++];
+        if ((read & 0x80) == 0x80)
+        {
+            // Long BER
+            // nb of bytes to read 
+            int nbBytesToRead = read & 0x7F;
+            Logger.LogDebug("Ber Long form, length:{length}", nbBytesToRead);
+            while (nbBytesToRead-- > 0)
+            {
+                value <<= 8;
+                value += array[index++];
+            }
+        }
+        else
+        {
+            Logger.LogDebug("Ber short form");
+            value = read;
+        }
+        Logger.LogDebug("Length: {length}", value);
+        return value;
+    }
+
+    /// <summary>
     /// Read the next available KLV Message.
     /// This method will automatically seek to next valid message.
     /// </summary>
@@ -140,7 +175,7 @@ public class KLVManager(ILogger logger)
                 KLVData item = new()
                 {
                     Key = value[index++],
-                    Length = value[index++]
+                    Length = ReadOidLengthFromByteArray(value, ref index)
                 };
                 item.Value = new byte[item.Length];
                 // Check that remaining length is sufficient to contains this tag value

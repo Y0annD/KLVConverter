@@ -76,6 +76,28 @@ public class KLVManagerTests
         Assert.That(Manager.ReadOidLength(reader), Is.EqualTo(65535));
     }
 
+[Test]
+    public void TestReadShortBerLengthFromByteArray()
+    {
+        int index = 0;
+        Assert.That(Manager.ReadOidLengthFromByteArray([1], ref index), Is.EqualTo(1));
+        index = 0;
+        Assert.That(Manager.ReadOidLengthFromByteArray([0x7f], ref index), Is.EqualTo(0x7F));
+    }
+
+    [Test]
+    public void TestReadLongBerLengthFromByteArray()
+    {
+        int index = 0;
+
+        Assert.That(Manager.ReadOidLengthFromByteArray([0x81, 0x1], ref index), Is.EqualTo(1));
+        index = 0;
+        Assert.That(Manager.ReadOidLengthFromByteArray([0x81, 0xFF], ref index), Is.EqualTo(0xFF));
+        index = 0;
+        Assert.That(Manager.ReadOidLengthFromByteArray([0x82, 0xFF, 0xFF], ref index), Is.EqualTo(65535));
+    }
+
+
     [Test]
     public void TestReadNextKLVMessage()
     {
