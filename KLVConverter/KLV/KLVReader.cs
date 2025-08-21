@@ -47,7 +47,7 @@ public class KLVReader
                 {
                     data.Add(result);
                 }
-            } while (result != null);
+            } while (result != null && binReader.BaseStream.Position != binReader.BaseStream.Length);
         }
         return data;
     }
